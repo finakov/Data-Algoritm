@@ -80,7 +80,13 @@ function Queue() {
     }
 
     this.enqueue = function(element) {
-        collection.push(element)
+        if (element.constructor === Array){
+            for (let i = 0; i < element.length; i++){
+                collection.push(element[i])
+            }
+        } else {
+            collection.push(element)
+        }   
     }
 
     this.dequeue = function() {
@@ -115,7 +121,7 @@ graph['thom'] = []
 graph['jonny'] = []
 
 function personIsSeller(name) {
-    return name[-1] === 'm'
+    return name.slice(-1) === 'm'
 }
 
 function search(name) {
@@ -126,14 +132,16 @@ function search(name) {
         person = search_queue.front()
         if (person != searched) {
             if (personIsSeller(person)){
-                console.log(person + 'is mango seller');
+                console.log(person + ' is mango seller');
                 return true;
             } else {
-                search_queue.enqueue(person)
+                search_queue.dequeue()
+                search_queue.enqueue(graph[person])
                 searched.push(person)
             }
-        }
-        return false
+        }    
     } 
+    return false
 }
+
 
